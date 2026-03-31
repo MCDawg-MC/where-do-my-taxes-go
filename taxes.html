@@ -1246,6 +1246,9 @@
       .each(function(d) { this._cur = { startAngle: d.startAngle, endAngle: d.startAngle }; });
     entering.merge(paths)
       .on('mouseenter', onEnter).on('mousemove', onMove).on('mouseleave', onLeave).on('click', onClick)
+      .on('touchstart.chart', onTouchStart, { passive: false })
+      .on('touchmove.chart',  onTouchMove,  { passive: false })
+      .on('touchend.chart',   onTouchEnd)
       .transition().duration(DUR).delay((d, i) => rm ? 0 : i * 28).ease(d3.easeCubicOut).attr('opacity', 1)
       .attrTween('d', function(d) {
         const interp = d3.interpolate(this._cur, d); this._cur = interp(1); return t => arcN(interp(t));
@@ -1254,6 +1257,25 @@
     renderLegend(data);
   }
 
+  // ── Shared helper: open breakdown accordion for a named category (no scroll) ──
+  function openBreakdownCard(name) {
+    const breakdownBody = document.getElementById('breakdown-body');
+    const breakdownHdr  = document.querySelector('[data-target="breakdown-body"]');
+    if (!breakdownBody.classList.contains('open')) {
+      breakdownBody.classList.add('open');
+      breakdownHdr.setAttribute('aria-expanded', 'true');
+    }
+    document.querySelectorAll('.breakdown-card').forEach(c => {
+      if (c.dataset.name === name) {
+        if (!c.classList.contains('open')) toggleCard(c);
+        // Flash outline in-place — no scrollIntoView, no page movement
+        c.style.outline = '1px solid var(--color-accent)';
+        setTimeout(() => c.style.outline = '', 800);
+      }
+    });
+  }
+
+  // ── Mouse/pointer handlers (desktop — untouched) ──────────────────
   function onEnter(event, d) {
     d3.select(this).raise().transition().duration(DUR_F).attr('d', arcH).attr('filter', 'url(#accent-glow)').attr('opacity', 1);
     showTip(event, d);
@@ -1261,20 +1283,40 @@
   function onLeave(event, d) { d3.select(this).transition().duration(DUR_F).attr('d', arcN).attr('filter', null); hideTip(); }
   function onMove(event) { posTip(event); }
   function onClick(event, d) {
-    const cards = document.querySelectorAll('.breakdown-card');
-    // Open breakdown section if collapsed
-    const breakdownBody = document.getElementById('breakdown-body');
-    const breakdownHdr = document.querySelector('[data-target="breakdown-body"]');
-    if (!breakdownBody.classList.contains('open')) {
-      breakdownBody.classList.add('open');
-      breakdownHdr.setAttribute('aria-expanded', 'true');
+    // Fix 2: open breakdown in-place — no scrollIntoView
+    openBreakdownCard(d.data.name);
+  }
+
+  // ── Touch handlers (mobile finger-tracking tooltip) ───────────────
+  let _touchActiveDatum = null;
+
+  function onTouchStart(event, d) {
+    event.preventDefault(); // block page scroll while on chart + suppress synthesized click
+    const touch = event.touches[0];
+    if (!touch) return;
+    _touchActiveDatum = d;
+    d3.select(this).raise()
+      .transition().duration(DUR_F)
+      .attr('d', arcH).attr('filter', 'url(#accent-glow)').attr('opacity', 1);
+    buildTip(d);
+    posTouchTip(touch.clientX, touch.clientY);
+  }
+
+  function onTouchMove(event, d) {
+    event.preventDefault(); // keep tooltip tracking finger without scrolling the page
+    const touch = event.touches[0];
+    if (!touch) return;
+    posTouchTip(touch.clientX, touch.clientY);
+  }
+
+  function onTouchEnd(event, d) {
+    d3.select(this).transition().duration(DUR_F).attr('d', arcN).attr('filter', null);
+    hideTip();
+    // Open breakdown detail in-place using the datum captured at touchstart
+    if (_touchActiveDatum) {
+      openBreakdownCard(_touchActiveDatum.data.name);
+      _touchActiveDatum = null;
     }
-    cards.forEach(c => {
-      if (c.dataset.name === d.data.name) {
-        if (!c.classList.contains('open')) toggleCard(c);
-        setTimeout(() => { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.style.outline = '1px solid var(--color-accent)'; setTimeout(() => c.style.outline = '', 800); }, 50);
-      }
-    });
   }
 
   /* ═══════════════════════════════════════════
@@ -1294,12 +1336,8 @@
         </div>
         <div class="legend-amount">${fmtFull(cat.dollars)}</div>`;
       item.addEventListener('click', () => {
-        const breakdownBody = document.getElementById('breakdown-body');
-        const breakdownHdr = document.querySelector('[data-target="breakdown-body"]');
-        if (!breakdownBody.classList.contains('open')) { breakdownBody.classList.add('open'); breakdownHdr.setAttribute('aria-expanded', 'true'); }
-        document.querySelectorAll('.breakdown-card').forEach(c => {
-          if (c.dataset.name === cat.name) { if (!c.classList.contains('open')) toggleCard(c); c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        });
+        // Fix 2: openBreakdownCard handles section open + card open, no scroll
+        openBreakdownCard(cat.name);
       });
       el.appendChild(item);
     });
@@ -1403,7 +1441,8 @@
   /* ═══════════════════════════════════════════
      8. TOOLTIP
   ═══════════════════════════════════════════ */
-  function showTip(event, d) {
+  // ── buildTip: fills tooltip HTML and marks it visible (shared by mouse + touch) ──
+  function buildTip(d) {
     const tip = document.getElementById('tooltip');
     tip.innerHTML = `
       <div class="tt-eyebrow">Budget Allocation</div>
@@ -1412,9 +1451,21 @@
       <div class="tt-row"><span class="tt-key">BUDGET_PCT</span><span class="tt-val">${d.data.percentage}%</span></div>
       <div class="tt-row"><span class="tt-key">YOUR_SHARE</span><span class="tt-val white">${fmtFull(d.data.dollars)}</span></div>
       <div class="tt-row"><span class="tt-key">CATEGORY</span><span class="tt-val" style="color:var(--color-text-secondary)">${d.data.tag.toUpperCase()}</span></div>`;
-    tip.classList.add('visible'); tip.setAttribute('aria-hidden', 'false'); posTip(event);
+    tip.classList.add('visible');
+    tip.setAttribute('aria-hidden', 'false');
   }
-  function hideTip() { document.getElementById('tooltip').classList.remove('visible'); }
+
+  // ── showTip: desktop mouse path ───────────────────────────────────
+  function showTip(event, d) {
+    buildTip(d);
+    posTip(event);
+  }
+  function hideTip() {
+    const tip = document.getElementById('tooltip');
+    tip.classList.remove('visible');
+    tip.setAttribute('aria-hidden', 'true');
+  }
+  // Desktop: tooltip trails cursor to the right (or flips left at edge)
   function posTip(event) {
     const tip = document.getElementById('tooltip');
     const tw = tip.offsetWidth, th = tip.offsetHeight;
@@ -1423,6 +1474,17 @@
     if (y < 8) y = 8;
     if (y + th > window.innerHeight - 8) y = window.innerHeight - th - 8;
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  // Touch: tooltip floats centered above the finger (avoids occlusion)
+  function posTouchTip(clientX, clientY) {
+    const tip = document.getElementById('tooltip');
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = clientX - tw / 2;               // center on finger
+    let y = clientY - th - 22;              // above the finger
+    x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));
+    if (y < 8) y = clientY + 22;            // flip below if too close to top
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
   }
 
   /* ═══════════════════════════════════════════
@@ -1551,6 +1613,10 @@
       timer = setTimeout(refresh, 250);
     });
     document.getElementById('filing-toggle').addEventListener('change', refresh);
+
+    // Fix 3: dismiss any visible tooltip when the page is scrolled
+    // (catches stuck tooltips from touch + scroll sequences)
+    window.addEventListener('scroll', hideTip, { passive: true });
   });
 </script>
 </body>
