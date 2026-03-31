@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,9 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..900;1,9..40,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     /* ============================================================
-       ANDURIL DESIGN SYSTEM TOKENS
+       DESIGN SYSTEM TOKENS — DARK (DEFAULT)
     ============================================================ */
-    :root {
+    :root, [data-theme="dark"] {
       --color-black:          #000000;
       --color-near-black:     #0a0a0a;
       --color-surface:        #111111;
@@ -31,17 +31,70 @@
       --color-white:          #ffffff;
       --color-white-10:       rgba(255,255,255,0.10);
       --color-white-05:       rgba(255,255,255,0.05);
+      --nav-bg:               rgba(0,0,0,0.9);
+      --hero-grid-opacity:    0.18;
+      --placeholder-ring:     #2a2a2a;
+      --toggle-icon:          "◑";
+      --toggle-label:         "LIGHT";
+    }
+
+    /* ============================================================
+       DESIGN SYSTEM TOKENS — LIGHT
+    ============================================================ */
+    [data-theme="light"] {
+      --color-black:          #f5f6f8;
+      --color-near-black:     #ffffff;
+      --color-surface:        #f0f2f5;
+      --color-surface-2:      #e8eaed;
+      --color-surface-3:      #dde1e7;
+      --color-border:         #d8dce4;
+      --color-border-mid:     #c0c6d0;
+      --color-border-light:   #a8b0bc;
+      --color-text-primary:   #0d0e0f;
+      --color-text-secondary: #4b5563;
+      --color-text-tertiary:  #6b7280;
+      --color-text-muted:     #9ca3af;
+      --color-accent:         #d94a14;
+      --color-accent-warm:    #e8521a;
+      --color-accent-dim:     #b83e10;
+      --color-accent-glow:    rgba(217, 74, 20, 0.12);
+      --color-accent-border:  rgba(217, 74, 20, 0.3);
+      --color-white:          #0d0e0f;
+      --color-white-10:       rgba(0,0,0,0.08);
+      --color-white-05:       rgba(0,0,0,0.04);
+      --nav-bg:               rgba(245,246,248,0.95);
+      --hero-grid-opacity:    0.07;
+      --placeholder-ring:     #d8dce4;
+      --toggle-icon:          "☀";
+      --toggle-label:         "DARK";
+    }
+
+    /* ============================================================
+       EXTENDED PALETTE (accent colors — same in both themes)
+    ============================================================ */
+    :root {
+      --color-blue:    #4f9cf9;
+      --color-green:   #22c55e;
+      --color-amber:   #f59e0b;
+      --color-purple:  #a855f7;
+      --color-teal:    #14b8a6;
+      --color-red:     #ef4444;
+      --color-cyan:    #06b6d4;
+      --color-pink:    #ec4899;
+      --color-lime:    #84cc16;
+      --color-violet:  #8b5cf6;
+      --color-indigo:  #6366f1;
 
       --font-display: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --font-body:    'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --font-mono:    'IBM Plex Mono', 'Courier New', monospace;
 
-      --text-display-xl:  clamp(56px, 9vw, 120px);
-      --text-display-lg:  clamp(40px, 7vw, 88px);
-      --text-display-md:  clamp(32px, 5.5vw, 64px);
-      --text-heading-xl:  clamp(28px, 4vw, 52px);
-      --text-heading-lg:  clamp(22px, 3vw, 40px);
-      --text-heading-md:  clamp(18px, 2.5vw, 32px);
+      --text-display-xl:  clamp(42px, 8vw, 120px);
+      --text-display-lg:  clamp(32px, 6vw, 88px);
+      --text-display-md:  clamp(26px, 5vw, 64px);
+      --text-heading-xl:  clamp(22px, 3.5vw, 52px);
+      --text-heading-lg:  clamp(18px, 2.8vw, 40px);
+      --text-heading-md:  clamp(16px, 2.2vw, 32px);
       --text-body-lg:     18px;
       --text-body-md:     16px;
       --text-body-sm:     14px;
@@ -74,10 +127,10 @@
       --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px;
       --space-32: 128px;
 
-      --section-padding-y: clamp(64px, 10vw, 120px);
-      --section-padding-x: clamp(20px, 5vw, 80px);
-      --nav-height: 72px;
-      --card-padding: clamp(20px, 3vw, 40px);
+      --section-padding-y: clamp(48px, 8vw, 120px);
+      --section-padding-x: clamp(16px, 5vw, 80px);
+      --nav-height: 64px;
+      --card-padding: clamp(16px, 3vw, 40px);
       --container-max: 1360px;
       --container-padding: clamp(16px, 5vw, 72px);
 
@@ -100,6 +153,7 @@
       line-height: var(--leading-normal);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      transition: background var(--duration-slow) ease, color var(--duration-slow) ease;
       animation: page-enter 0.4s var(--ease-out) forwards;
     }
     img { display: block; max-width: 100%; }
@@ -125,7 +179,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: var(--nav-height);
-      background: rgba(0,0,0,0.9);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--color-border);
@@ -134,6 +188,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 var(--container-padding);
+      gap: var(--space-4);
+      transition: background var(--duration-slow) ease, border-color var(--duration-slow) ease;
     }
     .nav-logo {
       font-family: var(--font-display);
@@ -141,14 +197,48 @@
       font-weight: var(--weight-black);
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
     }
     .nav-meta {
       font-family: var(--font-mono);
       font-size: var(--text-body-xs);
       color: var(--color-text-tertiary);
       letter-spacing: 0.04em;
+      display: none;
     }
+    @media (min-width: 600px) { .nav-meta { display: block; } }
     .nav-meta span { color: var(--color-accent); }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 6px 12px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-mid);
+      color: var(--color-text-secondary);
+      font-family: var(--font-mono);
+      font-size: var(--text-overline);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--duration-normal) ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      background: var(--color-surface-3);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+    .theme-toggle-icon { font-size: 12px; }
 
     /* ============ HERO ============ */
     .hero {
@@ -157,7 +247,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: calc(var(--nav-height) + var(--space-8)) var(--container-padding) var(--space-24);
+      padding: calc(var(--nav-height) + var(--space-8)) var(--container-padding) var(--space-16);
       overflow: hidden;
       border-bottom: 1px solid var(--color-border);
     }
@@ -166,7 +256,13 @@
       inset: 0;
       background:
         radial-gradient(ellipse 60% 50% at 70% 50%, rgba(232,82,26,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(255,255,255,0.015) 0%, transparent 60%);
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(79,156,249,0.03) 0%, transparent 60%);
+      transition: background var(--duration-slow) ease;
+    }
+    [data-theme="light"] .hero-bg {
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(217,74,20,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(79,156,249,0.04) 0%, transparent 60%);
     }
     .hero-grid-overlay {
       position: absolute;
@@ -175,7 +271,8 @@
         linear-gradient(var(--color-border) 1px, transparent 1px),
         linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
       background-size: 80px 80px;
-      opacity: 0.18;
+      opacity: var(--hero-grid-opacity);
+      transition: opacity var(--duration-slow) ease;
     }
     .hero-content { position: relative; z-index: 1; max-width: 1000px; }
     .hero-eyebrow {
@@ -205,8 +302,48 @@
       color: var(--color-text-secondary);
       max-width: 520px;
       line-height: var(--leading-relaxed);
-      margin-bottom: var(--space-12);
+      margin-bottom: var(--space-10);
     }
+    @media (max-width: 480px) {
+      .hero-sub { font-size: var(--text-body-md); }
+    }
+    .hero-cta {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 14px 24px;
+      background: var(--color-accent);
+      color: white;
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      border: none;
+      text-decoration: none;
+      transition: background var(--duration-normal) ease;
+    }
+    .btn-primary:hover { background: var(--color-accent-warm); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 13px 23px;
+      background: transparent;
+      color: var(--color-text-primary);
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      border: 1px solid var(--color-border-light);
+      text-decoration: none;
+      transition: border-color var(--duration-normal) ease;
+    }
+    .btn-secondary:hover { border-color: var(--color-text-primary); }
     .hero-meta {
       position: absolute;
       bottom: var(--space-8);
@@ -217,7 +354,9 @@
       text-align: right;
       line-height: 1.8;
       letter-spacing: 0.04em;
+      display: none;
     }
+    @media (min-width: 768px) { .hero-meta { display: block; } }
 
     /* ============ TICKER ============ */
     .ticker {
@@ -227,6 +366,7 @@
       border-bottom: 1px solid var(--color-border);
       padding: var(--space-4) 0;
       background: var(--color-near-black);
+      transition: background var(--duration-slow) ease;
     }
     .ticker-track {
       display: flex;
@@ -260,6 +400,7 @@
     .section {
       padding: var(--section-padding-y) var(--container-padding);
       border-bottom: 1px solid var(--color-border);
+      transition: background var(--duration-slow) ease, border-color var(--duration-slow) ease;
     }
     .section-overline {
       display: flex;
@@ -277,6 +418,7 @@
     .overline-rule {
       width: 32px; height: 1px;
       background: var(--color-accent);
+      flex-shrink: 0;
     }
     .section-heading {
       font-family: var(--font-display);
@@ -288,144 +430,6 @@
       margin-bottom: var(--space-6);
     }
 
-    /* ============ INPUT SECTION ============ */
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--color-border);
-      margin-top: var(--space-12);
-    }
-    .input-cell {
-      background: var(--color-near-black);
-      padding: var(--space-8) var(--space-6);
-    }
-    .input-label {
-      font-size: var(--text-label);
-      font-weight: var(--weight-bold);
-      letter-spacing: var(--tracking-widest);
-      text-transform: uppercase;
-      color: var(--color-text-tertiary);
-      margin-bottom: var(--space-4);
-      font-family: var(--font-mono);
-    }
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      border: 1px solid var(--color-border-mid);
-      background: var(--color-surface);
-      transition: border-color var(--duration-normal) ease;
-    }
-    .input-wrapper:focus-within {
-      border-color: var(--color-accent);
-    }
-    .input-prefix {
-      padding: 14px 16px;
-      font-family: var(--font-mono);
-      font-size: var(--text-body-md);
-      font-weight: var(--weight-medium);
-      color: var(--color-text-tertiary);
-      border-right: 1px solid var(--color-border-mid);
-      background: var(--color-surface-2);
-      user-select: none;
-    }
-    #income-input {
-      flex: 1;
-      padding: 14px 16px;
-      background: transparent;
-      border: none;
-      color: var(--color-text-primary);
-      font-family: var(--font-mono);
-      font-size: var(--text-body-lg);
-      font-weight: var(--weight-bold);
-      letter-spacing: 0.02em;
-      outline: none;
-      -moz-appearance: textfield;
-    }
-    #income-input::-webkit-outer-spin-button,
-    #income-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-    #income-input::placeholder { color: var(--color-text-muted); font-weight: var(--weight-regular); }
-
-    /* Filing toggle */
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      margin-top: var(--space-6);
-    }
-    .toggle-label {
-      font-size: var(--text-body-xs);
-      font-weight: var(--weight-medium);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      color: var(--color-text-secondary);
-    }
-    .toggle-label.active { color: var(--color-text-primary); }
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 40px;
-      height: 22px;
-    }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-    .toggle-slider {
-      position: absolute;
-      inset: 0;
-      background: var(--color-surface-3);
-      border: 1px solid var(--color-border-mid);
-      cursor: pointer;
-      transition: background var(--duration-normal) ease;
-    }
-    .toggle-slider::before {
-      content: '';
-      position: absolute;
-      width: 14px; height: 14px;
-      left: 3px; top: 3px;
-      background: var(--color-text-tertiary);
-      transition: transform var(--duration-normal) ease, background var(--duration-normal) ease;
-    }
-    .toggle-switch input:checked + .toggle-slider { background: var(--color-accent-glow); border-color: var(--color-accent-border); }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: var(--color-accent); }
-
-    /* ============ STAT GRID (Tax Summary) ============ */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 1px;
-      background: var(--color-border);
-      margin-top: var(--space-6);
-    }
-    .stat-card {
-      background: var(--color-near-black);
-      padding: var(--space-8) var(--space-6);
-    }
-    .stat-number {
-      font-family: var(--font-display);
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: var(--weight-black);
-      letter-spacing: var(--tracking-tightest);
-      line-height: 1;
-      color: var(--color-text-primary);
-    }
-    .stat-number.accent { color: var(--color-accent); }
-    .stat-label {
-      font-family: var(--font-mono);
-      font-size: var(--text-body-xs);
-      font-weight: var(--weight-medium);
-      letter-spacing: var(--tracking-wider);
-      text-transform: uppercase;
-      color: var(--color-text-tertiary);
-      margin-top: var(--space-2);
-    }
-    .stat-placeholder {
-      font-family: var(--font-mono);
-      font-size: var(--text-body-xs);
-      color: var(--color-text-tertiary);
-      padding: var(--space-6);
-      letter-spacing: 0.04em;
-    }
-
     /* ============ CHART SECTION ============ */
     .chart-layout {
       display: grid;
@@ -435,6 +439,9 @@
       margin-top: var(--space-12);
       align-items: start;
     }
+    @media (max-width: 820px) {
+      .chart-layout { grid-template-columns: 1fr; }
+    }
     .chart-panel {
       background: var(--color-near-black);
       padding: var(--space-8);
@@ -442,6 +449,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
+      transition: background var(--duration-slow) ease;
     }
     #chart-container {
       position: relative;
@@ -466,7 +474,7 @@
     }
     .center-amount {
       font-family: var(--font-display);
-      font-size: clamp(20px, 3vw, 32px);
+      font-size: clamp(18px, 3vw, 32px);
       font-weight: var(--weight-black);
       letter-spacing: var(--tracking-tightest);
       color: var(--color-text-primary);
@@ -486,7 +494,9 @@
       background: var(--color-near-black);
       overflow-y: auto;
       max-height: 500px;
+      transition: background var(--duration-slow) ease;
     }
+    @media (max-width: 820px) { .legend-panel { max-height: none; } }
     .legend-panel::-webkit-scrollbar { width: 3px; }
     .legend-panel::-webkit-scrollbar-thumb { background: var(--color-border-mid); }
     .legend-item {
@@ -531,13 +541,165 @@
       white-space: nowrap;
     }
 
-    /* ============ BREAKDOWN CARDS ============ */
-    .breakdown-grid {
+    /* ============ INPUT SECTION ============ */
+    .input-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 1px;
       background: var(--color-border);
       margin-top: var(--space-12);
+    }
+    @media (max-width: 768px) {
+      .input-grid { grid-template-columns: 1fr; }
+    }
+    .input-cell {
+      background: var(--color-near-black);
+      padding: var(--space-8) var(--space-6);
+      transition: background var(--duration-slow) ease;
+    }
+    .input-label {
+      font-size: var(--text-label);
+      font-weight: var(--weight-bold);
+      letter-spacing: var(--tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: var(--space-4);
+      font-family: var(--font-mono);
+    }
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid var(--color-border-mid);
+      background: var(--color-surface);
+      transition: border-color var(--duration-normal) ease, background var(--duration-slow) ease;
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--color-accent);
+    }
+    .input-prefix {
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: var(--text-body-md);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-tertiary);
+      border-right: 1px solid var(--color-border-mid);
+      background: var(--color-surface-2);
+      user-select: none;
+      transition: background var(--duration-slow) ease, border-color var(--duration-slow) ease;
+    }
+    #income-input {
+      flex: 1;
+      padding: 14px 16px;
+      background: transparent;
+      border: none;
+      color: var(--color-text-primary);
+      font-family: var(--font-mono);
+      font-size: var(--text-body-lg);
+      font-weight: var(--weight-bold);
+      letter-spacing: 0.02em;
+      outline: none;
+      -moz-appearance: textfield;
+      min-width: 0;
+    }
+    #income-input::-webkit-outer-spin-button,
+    #income-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    #income-input::placeholder { color: var(--color-text-muted); font-weight: var(--weight-regular); }
+
+    /* Filing toggle */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .toggle-label {
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+    }
+    .toggle-label.active { color: var(--color-text-primary); }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--color-surface-3);
+      border: 1px solid var(--color-border-mid);
+      cursor: pointer;
+      transition: background var(--duration-normal) ease;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      left: 3px; top: 3px;
+      background: var(--color-text-tertiary);
+      transition: transform var(--duration-normal) ease, background var(--duration-normal) ease;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--color-accent-glow); border-color: var(--color-accent-border); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); background: var(--color-accent); }
+
+    /* ============ STAT GRID (Tax Summary) ============ */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1px;
+      background: var(--color-border);
+      margin-top: var(--space-6);
+    }
+    .stat-card {
+      background: var(--color-near-black);
+      padding: var(--space-8) var(--space-6);
+      transition: background var(--duration-slow) ease;
+    }
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3.5vw, 48px);
+      font-weight: var(--weight-black);
+      letter-spacing: var(--tracking-tightest);
+      line-height: 1;
+      color: var(--color-text-primary);
+    }
+    .stat-number.accent { color: var(--color-accent); }
+    .stat-number.blue   { color: var(--color-blue); }
+    .stat-number.green  { color: var(--color-green); }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-2);
+    }
+    .stat-placeholder {
+      font-family: var(--font-mono);
+      font-size: var(--text-body-xs);
+      color: var(--color-text-tertiary);
+      padding: var(--space-6);
+      letter-spacing: 0.04em;
+    }
+
+    /* ============ BREAKDOWN CARDS ============ */
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--color-border);
+      margin-top: var(--space-12);
+    }
+    @media (max-width: 480px) {
+      .breakdown-grid { grid-template-columns: 1fr; }
     }
     .breakdown-card {
       background: var(--color-near-black);
@@ -572,6 +734,7 @@
       text-transform: uppercase;
       color: var(--color-text-tertiary);
       margin-bottom: var(--space-2);
+      transition: background var(--duration-slow) ease;
     }
     .breakdown-card-name {
       font-family: var(--font-display);
@@ -644,6 +807,133 @@
       color: var(--color-accent);
     }
 
+    /* ============ REVENUE PANEL ============ */
+    .revenue-intro {
+      font-size: var(--text-body-md);
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-10);
+    }
+    .revenue-total-banner {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      padding: var(--space-8) var(--space-8);
+      background: var(--color-near-black);
+      border: 1px solid var(--color-border);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      transition: background var(--duration-slow) ease;
+    }
+    .revenue-total-amount {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: var(--weight-black);
+      letter-spacing: var(--tracking-tightest);
+      color: var(--color-blue);
+      line-height: 1;
+    }
+    .revenue-total-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-body-xs);
+      color: var(--color-text-tertiary);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+    }
+    .revenue-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--color-border);
+    }
+    @media (max-width: 768px) {
+      .revenue-layout { grid-template-columns: 1fr; }
+    }
+    .revenue-bars-panel {
+      background: var(--color-near-black);
+      padding: var(--space-8);
+      transition: background var(--duration-slow) ease;
+    }
+    .revenue-bar-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-4);
+      align-items: center;
+      margin-bottom: var(--space-5);
+    }
+    .revenue-bar-row:last-child { margin-bottom: 0; }
+    .revenue-bar-label {
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-2);
+    }
+    .revenue-bar-track {
+      height: 6px;
+      background: var(--color-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .revenue-bar-fill {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      transition: width var(--duration-slower) var(--ease-out);
+    }
+    .revenue-bar-value {
+      font-family: var(--font-mono);
+      font-size: var(--text-body-xs);
+      font-weight: var(--weight-medium);
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      text-align: right;
+    }
+    .revenue-bar-pct {
+      font-family: var(--font-mono);
+      font-size: var(--text-overline);
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .revenue-stats-panel {
+      background: var(--color-near-black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--color-border);
+      align-content: start;
+    }
+    .revenue-stat-card {
+      background: var(--color-near-black);
+      padding: var(--space-6) var(--space-6);
+      transition: background var(--duration-slow) ease;
+    }
+    .revenue-stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.5vw, 32px);
+      font-weight: var(--weight-black);
+      letter-spacing: var(--tracking-tightest);
+      line-height: 1;
+    }
+    .revenue-stat-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-overline);
+      font-weight: var(--weight-medium);
+      letter-spacing: var(--tracking-wider);
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-2);
+    }
+    .revenue-note {
+      font-family: var(--font-mono);
+      font-size: var(--text-overline);
+      color: var(--color-text-tertiary);
+      letter-spacing: 0.03em;
+      margin-top: var(--space-6);
+      line-height: 1.7;
+    }
+
     /* ============ TOOLTIP ============ */
     #tooltip {
       position: fixed;
@@ -706,6 +996,7 @@
     .section-footer {
       padding: var(--space-16) var(--container-padding);
       border-top: 1px solid var(--color-border);
+      transition: border-color var(--duration-slow) ease;
     }
     .sources-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-8); }
     .sources-list li {
@@ -746,16 +1037,16 @@
       letter-spacing: 0.04em;
     }
 
-    /* ============ RESPONSIVE ============ */
-    @media (max-width: 900px) {
-      .chart-layout { grid-template-columns: 1fr; }
-      .legend-panel { max-height: none; }
-      .input-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 600px) {
-      .breakdown-grid { grid-template-columns: 1fr; }
+    /* ============ RESPONSIVE — MOBILE FIRST FIXES ============ */
+    @media (max-width: 480px) {
       .stat-grid { grid-template-columns: 1fr 1fr; }
+      .section { padding: var(--space-12) var(--space-4); }
+      .chart-panel { padding: var(--space-4); }
+      .revenue-total-banner { padding: var(--space-6); }
+      .revenue-bars-panel { padding: var(--space-6); }
+      .revenue-stat-card { padding: var(--space-4); }
     }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
       .reveal { opacity: 1; transform: none; }
@@ -767,7 +1058,13 @@
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">Federal Budget Analysis</div>
-  <div class="nav-meta">FY2024 &nbsp;/&nbsp; <span>ACTIVE</span> &nbsp;/&nbsp; DATA.TREASURY.GOV</div>
+  <div class="nav-right">
+    <div class="nav-meta">FY2024 &nbsp;/&nbsp; <span>ACTIVE</span> &nbsp;/&nbsp; DATA.TREASURY.GOV</div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+      <span class="theme-toggle-icon" id="theme-icon">◑</span>
+      <span id="theme-label">LIGHT</span>
+    </button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -778,9 +1075,9 @@
     <span class="hero-eyebrow">FY2024 &nbsp;·&nbsp; $6.9 Trillion Budget &nbsp;·&nbsp; Federal Spending Breakdown</span>
     <h1 class="hero-title">Where Do<br>My <em>Taxes</em><br>Go?</h1>
     <p class="hero-sub">Enter your annual income to see exactly how your federal taxes are allocated across every category of the US government budget.</p>
-    <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;">
-      <a href="#input-section" class="btn-primary" style="display:inline-flex;align-items:center;gap:var(--space-2);padding:14px 28px;background:var(--color-accent);color:white;font-size:var(--text-body-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-wider);text-transform:uppercase;border:none;text-decoration:none;transition:background var(--duration-normal) ease;" onmouseover="this.style.background='var(--color-accent-warm)'" onmouseout="this.style.background='var(--color-accent)'">Enter Income →</a>
-      <a href="#breakdown-section" style="display:inline-flex;align-items:center;gap:var(--space-2);padding:13px 27px;background:transparent;color:var(--color-text-primary);font-size:var(--text-body-xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-wider);text-transform:uppercase;border:1px solid var(--color-border-light);text-decoration:none;transition:border-color var(--duration-normal) ease;" onmouseover="this.style.borderColor='white'" onmouseout="this.style.borderColor='var(--color-border-light)'">View Breakdown</a>
+    <div class="hero-cta">
+      <a href="#chart-section" class="btn-primary">View Allocation →</a>
+      <a href="#input-section" class="btn-secondary">Enter Income</a>
     </div>
   </div>
   <div class="hero-meta">
@@ -823,12 +1120,37 @@
   </div>
 </div>
 
-<!-- INPUT SECTION -->
+<!-- CHART SECTION — now first, above income input -->
+<section class="section reveal" id="chart-section">
+  <div class="container">
+    <div class="section-overline">
+      <span class="overline-rule"></span>
+      <span class="overline">01 — Spending Distribution</span>
+    </div>
+    <h2 class="section-heading">Budget Allocation</h2>
+    <p style="font-size:var(--text-body-md);color:var(--color-text-secondary);max-width:560px;line-height:var(--leading-relaxed);">Enter your income below to see your personal allocation. The chart shows how every federal tax dollar is proportionally distributed across spending categories.</p>
+    <div class="chart-layout">
+      <div class="chart-panel">
+        <div id="chart-container">
+          <svg id="donut-chart" role="img" aria-label="Federal spending allocation donut chart"></svg>
+          <div id="chart-center-label">
+            <div class="center-eyebrow">Your Tax</div>
+            <div class="center-amount">$0</div>
+            <div class="center-sub">Est. Federal</div>
+          </div>
+        </div>
+      </div>
+      <div class="legend-panel" id="legend-container"></div>
+    </div>
+  </div>
+</section>
+
+<!-- INPUT SECTION — now below chart -->
 <section class="section reveal" id="input-section">
   <div class="container">
     <div class="section-overline">
       <span class="overline-rule"></span>
-      <span class="overline">01 — Income Input</span>
+      <span class="overline">02 — Income Input</span>
     </div>
     <h2 class="section-heading">Calculate Your Allocation</h2>
     <p style="font-size:var(--text-body-md);color:var(--color-text-secondary);max-width:560px;line-height:var(--leading-relaxed);">Based on 2024 federal income tax brackets and standard deductions. Results show your estimated federal income tax distributed proportionally across spending categories.</p>
@@ -868,30 +1190,6 @@
   </div>
 </section>
 
-<!-- CHART SECTION -->
-<section class="section reveal" id="chart-section">
-  <div class="container">
-    <div class="section-overline">
-      <span class="overline-rule"></span>
-      <span class="overline">02 — Spending Distribution</span>
-    </div>
-    <h2 class="section-heading">Budget Allocation</h2>
-    <div class="chart-layout">
-      <div class="chart-panel">
-        <div id="chart-container">
-          <svg id="donut-chart" role="img" aria-label="Federal spending allocation donut chart"></svg>
-          <div id="chart-center-label">
-            <div class="center-eyebrow">Your Tax</div>
-            <div class="center-amount">$0</div>
-            <div class="center-sub">Est. Federal</div>
-          </div>
-        </div>
-      </div>
-      <div class="legend-panel" id="legend-container"></div>
-    </div>
-  </div>
-</section>
-
 <!-- BREAKDOWN SECTION -->
 <section class="section reveal" id="breakdown-section">
   <div class="container">
@@ -905,12 +1203,42 @@
   </div>
 </section>
 
+<!-- TOTAL FEDERAL TAX REVENUE PANEL — static, FY2024 -->
+<section class="section reveal" id="revenue-section">
+  <div class="container">
+    <div class="section-overline">
+      <span class="overline-rule"></span>
+      <span class="overline">04 — Total Federal Tax Revenue</span>
+    </div>
+    <h2 class="section-heading">Where Does the Money Come From?</h2>
+    <p class="revenue-intro">In FY2024, the federal government collected approximately $4.9 trillion in total revenue — still $1.8 trillion short of its $6.75 trillion in spending. Here's the breakdown of every major revenue source.</p>
+
+    <div class="revenue-total-banner">
+      <div class="revenue-total-amount">$4.92T</div>
+      <div>
+        <div class="revenue-total-label">Total Federal Revenue — FY2024</div>
+        <div style="font-family:var(--font-mono);font-size:var(--text-overline);color:var(--color-text-tertiary);margin-top:4px;letter-spacing:0.04em;">DEFICIT: $1.83T &nbsp;·&nbsp; TOTAL OUTLAYS: $6.75T &nbsp;·&nbsp; SOURCE: CBO / TREASURY</div>
+      </div>
+    </div>
+
+    <div class="revenue-layout">
+      <div class="revenue-bars-panel" id="revenue-bars"></div>
+      <div class="revenue-stats-panel" id="revenue-stats"></div>
+    </div>
+
+    <p class="revenue-note">
+      * Figures are approximate, sourced from CBO FY2024 Budget &amp; Economic Outlook and Treasury FiscalData.<br>
+      * "Misc. Receipts" includes Federal Reserve earnings remittances, fees, fines, and other non-tax revenue.
+    </p>
+  </div>
+</section>
+
 <!-- SOURCES -->
 <footer class="section-footer">
   <div class="container">
     <div class="section-overline">
       <span class="overline-rule"></span>
-      <span class="overline">04 — Sources &amp; References</span>
+      <span class="overline">05 — Sources &amp; References</span>
     </div>
     <h2 style="font-family:var(--font-display);font-size:var(--text-heading-lg);font-weight:var(--weight-bold);letter-spacing:var(--tracking-tight);">Data Sources</h2>
     <ul class="sources-list" id="sources-list"></ul>
@@ -929,23 +1257,34 @@
      1. CONSTANTS
   ═══════════════════════════════════════════ */
 
-  // Anduril-adapted chart palette:
-  // Accent (orange) for the largest category, then white/gray tactical range
+  // Varied, intentional color palette — each category gets a distinct hue
   const COLOR_PALETTE = [
-    '#e8521a', // Health — accent / largest
-    '#ffffff',  // Social Security
-    '#a0a0a0',  // Defense
-    '#f06329',  // Debt Interest — warm accent
-    '#d4d4d4',  // Veterans
-    '#666666',  // Economic Security
-    '#eeeeee',  // Education
-    '#888888',  // Transportation
-    '#4a4a4a',  // Other Govt
-    '#c44416',  // International — dim accent
-    '#bbbbbb',  // Science
-    '#555555',  // Environment
-    '#999999',  // Law Enforcement
+    '#e8521a', // Health — orange (brand accent)
+    '#4f9cf9', // Social Security — blue
+    '#22c55e', // Defense — green
+    '#f59e0b', // Debt Interest — amber
+    '#a855f7', // Veterans — purple
+    '#14b8a6', // Economic Security — teal
+    '#ef4444', // Education — red
+    '#06b6d4', // Transportation — cyan
+    '#f97316', // Govt Operations — orange-500
+    '#ec4899', // International — pink
+    '#84cc16', // Science — lime
+    '#8b5cf6', // Environment — violet
+    '#6366f1', // Law Enforcement — indigo
   ];
+
+  // FY2024 Federal Revenue by source — CBO/Treasury data
+  const REVENUE_CATEGORIES = [
+    { name: 'Individual Income Taxes', billions: 2426, color: '#4f9cf9',   label: 'Largest single source — wages, salaries, capital gains' },
+    { name: 'Payroll Taxes',           billions: 1632, color: '#22c55e',   label: 'Social Security & Medicare (FICA) contributions' },
+    { name: 'Corporate Income Taxes',  billions:  530, color: '#a855f7',   label: 'Taxes on corporate profits' },
+    { name: 'Misc. Receipts',          billions:  120, color: '#f59e0b',   label: 'Fed Reserve earnings, fees, fines, other non-tax' },
+    { name: 'Excise Taxes',            billions:   94, color: '#14b8a6',   label: 'Fuel, tobacco, alcohol, airline tickets' },
+    { name: 'Customs & Tariffs',       billions:   77, color: '#ec4899',   label: 'Duties on imported goods' },
+    { name: 'Estate & Gift Taxes',     billions:   39, color: '#84cc16',   label: 'Transfers of wealth at death or as gifts' },
+  ];
+  const TOTAL_REVENUE_B = 4918; // FY2024 approximate total, billions
 
   const SPENDING_CATEGORIES = [
     {
@@ -1203,7 +1542,6 @@
       .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const defs = svg.append('defs');
-    // Accent glow filter for hover
     const f = defs.append('filter').attr('id', 'accent-glow').attr('x', '-40%').attr('y', '-40%').attr('width', '180%').attr('height', '180%');
     f.append('feColorMatrix').attr('type', 'matrix').attr('values', '3 1 0 0 0  1 0.3 0 0 0  0 0 0 0 0  0 0 0 1 0').attr('result', 'colorMatrix');
     f.append('feGaussianBlur').attr('in', 'colorMatrix').attr('stdDeviation', '6').attr('result', 'blur');
@@ -1213,12 +1551,11 @@
 
     svg.append('g').attr('id', 'chart-g').attr('transform', `translate(${W/2},${H/2})`);
 
-    // Placeholder ring
     svg.select('#chart-g').append('circle')
       .attr('id', 'placeholder-ring')
       .attr('r', (OR + IR) / 2)
       .attr('fill', 'none')
-      .attr('stroke', '#2a2a2a')
+      .attr('stroke', getComputedStyle(document.documentElement).getPropertyValue('--placeholder-ring').trim() || '#2a2a2a')
       .attr('stroke-width', OR - IR - 2)
       .attr('stroke-dasharray', '6 5');
   }
@@ -1228,7 +1565,10 @@
     const pieData = pie(data);
     const g = d3.select('#chart-g');
 
-    g.select('#placeholder-ring').attr('display', taxOwed <= 0 ? 'block' : 'none');
+    // Update placeholder ring color for current theme
+    g.select('#placeholder-ring')
+      .attr('stroke', getComputedStyle(document.documentElement).getPropertyValue('--placeholder-ring').trim() || '#2a2a2a')
+      .attr('display', taxOwed <= 0 ? 'block' : 'none');
 
     if (taxOwed <= 0) {
       g.selectAll('path.seg').remove();
@@ -1461,7 +1801,56 @@
   }
 
   /* ═══════════════════════════════════════════
-     9. SOURCES
+     9. REVENUE PANEL
+  ═══════════════════════════════════════════ */
+  function renderRevenue() {
+    const barsEl  = document.getElementById('revenue-bars');
+    const statsEl = document.getElementById('revenue-stats');
+    if (!barsEl || !statsEl) return;
+
+    // Bars
+    barsEl.innerHTML = '';
+    REVENUE_CATEGORIES.forEach(cat => {
+      const pct = ((cat.billions / TOTAL_REVENUE_B) * 100).toFixed(1);
+      const row = document.createElement('div');
+      row.className = 'revenue-bar-row';
+      row.innerHTML = `
+        <div>
+          <div class="revenue-bar-label">${cat.name}</div>
+          <div class="revenue-bar-track">
+            <div class="revenue-bar-fill" style="width:${pct}%; background:${cat.color}"></div>
+          </div>
+          <div class="revenue-bar-pct" style="margin-top:3px;">${cat.label}</div>
+        </div>
+        <div style="text-align:right; padding-top: 2px;">
+          <div class="revenue-bar-value" style="color:${cat.color}">$${cat.billions}B</div>
+          <div class="revenue-bar-pct">${pct}%</div>
+        </div>`;
+      barsEl.appendChild(row);
+    });
+
+    // Stat cards — top 4 stats about the revenue picture
+    const statsData = [
+      { value: '$4.92T', label: 'Total Revenue FY2024', color: 'var(--color-blue)' },
+      { value: '$6.75T', label: 'Total Outlays FY2024', color: 'var(--color-accent)' },
+      { value: '$1.83T', label: 'Budget Deficit FY2024', color: 'var(--color-red)' },
+      { value: '49.4%',  label: 'Revenue from Income Tax', color: 'var(--color-blue)' },
+      { value: '33.2%',  label: 'Revenue from Payroll Tax', color: 'var(--color-green)' },
+      { value: '10.8%',  label: 'Revenue from Corp. Tax', color: 'var(--color-purple)' },
+    ];
+    statsEl.innerHTML = '';
+    statsData.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'revenue-stat-card';
+      card.innerHTML = `
+        <div class="revenue-stat-number" style="color:${s.color}">${s.value}</div>
+        <div class="revenue-stat-label">${s.label}</div>`;
+      statsEl.appendChild(card);
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     10. SOURCES
   ═══════════════════════════════════════════ */
   function renderSources() {
     const ul = document.getElementById('sources-list');
@@ -1473,7 +1862,51 @@
   }
 
   /* ═══════════════════════════════════════════
-     10. EVENTS + BOOTSTRAP
+     11. THEME TOGGLE
+  ═══════════════════════════════════════════ */
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    const icon  = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+    if (theme === 'dark') {
+      icon.textContent  = '◑';
+      label.textContent = 'LIGHT';
+    } else {
+      icon.textContent  = '☀';
+      label.textContent = 'DARK';
+    }
+    // Update placeholder ring color after theme change
+    const ring = document.getElementById('placeholder-ring');
+    if (ring) {
+      const color = getComputedStyle(document.documentElement)
+        .getPropertyValue('--placeholder-ring').trim();
+      ring.setAttribute('stroke', color || (theme === 'dark' ? '#2a2a2a' : '#d8dce4'));
+    }
+  }
+
+  function initTheme() {
+    const saved = localStorage.getItem('theme');
+    const theme = saved || getSystemTheme();
+    applyTheme(theme);
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+    // Respond to OS preference changes (if no saved preference)
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'light' : 'dark');
+      }
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     12. EVENTS + BOOTSTRAP
   ═══════════════════════════════════════════ */
   let timer = null;
 
@@ -1485,15 +1918,16 @@
     renderChart(tax);
     updateCardAmounts(data);
 
-    // Toggle label highlight
     document.getElementById('label-single').style.color = mfj ? 'var(--color-text-secondary)' : 'var(--color-text-primary)';
     document.getElementById('label-mfj').style.color    = mfj ? 'var(--color-text-primary)' : 'var(--color-text-secondary)';
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     initChart();
     renderCards(distribute(0));
     renderSources();
+    renderRevenue();
     renderChart(0);
     renderLegend(distribute(0));
 
